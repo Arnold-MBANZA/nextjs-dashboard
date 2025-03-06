@@ -3,8 +3,14 @@ import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import Form from '@/app/ui/invoices/edit-form';
 import { notFound } from 'next/navigation';
 
+// Définir le type des props attendues
+interface PageProps {
+  params: {
+    id: string;
+  };
+}
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: PageProps) {
   const id = params.id; // Extraction de l'ID depuis l'URL
   console.log('ID from URL:', id); // Log pour vérifier l'ID
 
@@ -33,4 +39,3 @@ export default async function Page({ params }: { params: { id: string } }) {
     </main>
   );
 }
-
