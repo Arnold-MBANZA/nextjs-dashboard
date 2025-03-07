@@ -144,20 +144,20 @@ export async function fetchInvoicesPages(query: string) {
 
 export async function fetchInvoiceById(id: string) {
   try {
-    console.log('Fetching invoice with ID:', id); // Log pour vérifier l'ID
+    console.log('Fetching invoice with ID:', id);
     const data = await sql<InvoiceForm[]>`
       SELECT
         invoices.id,
         invoices.customer_id,
-        invoices.amount,
+        invoices.amount::BIGINT, -- ✅ Cast en BIGINT si nécessaire
         invoices.status
       FROM invoices
       WHERE invoices.id = ${id};
     `;
-    console.log('Fetched data:', data); // Log des données récupérées
-    return data[0] || null; // Retourne null si aucune donnée
+    console.log('Fetched data:', data);
+    return data[0] || null;
   } catch (error) {
-    console.error('Database Error:', error); // Log des erreurs de base de données
+    console.error('Database Error:', error);
     throw new Error('Failed to fetch invoice.');
   }
 }

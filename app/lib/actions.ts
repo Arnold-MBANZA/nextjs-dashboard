@@ -42,21 +42,17 @@ export async function createInvoice(formData: FormData) {
 
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
-export async function updateInvoice(id: string, formData: FormData) {
-  const { customerId, amount, status } = UpdateInvoice.parse({
-    customerId: formData.get('customerId'),
-    amount: formData.get('amount'),
-    status: formData.get('status'),
-  });
-
-  const amountInCents = amount * 100;
-
+export async function updateInvoice(id: string, customerId: string, amount: number, status: string, formData: FormData) {
   try {
+    const amountInCents = Math.min(Math.round(amount * 100), 9223372036854775807); // ✅ Limite la valeur pour éviter l'erreur
+
     await sql`
       UPDATE invoices
-      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-      WHERE id = ${id}
+      SET customer_id = ${customerId}, amount = ${amountInCents}::BIGINT, status = ${status}
+      WHERE id = ${id};
     `;
+
+    revalidatePath('/dashboard/invoices');
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to update invoice.');
