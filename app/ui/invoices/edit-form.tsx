@@ -16,7 +16,19 @@ export default function EditInvoiceForm({
 }) {
   const initialState: State = { message: null, errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+  
+  // Créer une fonction wrapper qui accepte l'état attendu
+  const handleAction = (state: State) => {
+    const formData = new FormData();
+    Object.entries(state).forEach(([key, value]) => {
+      if (value !== null) {
+        formData.append(key, value as string);
+      }
+    });
+    return updateInvoiceWithId(formData);
+  };
+
+  const [state, formAction] = useActionState(handleAction, initialState);
 
   return (
     <form action={formAction}>
