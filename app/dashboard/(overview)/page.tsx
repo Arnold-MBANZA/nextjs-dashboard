@@ -1,29 +1,25 @@
-import RevenueChart from '@/app/ui/dashboard/revenue-chart';
-import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
-import { lusitana } from '@/app/ui/fonts';
-import { fetchLatestInvoices } from '@/app/lib/data';
+import AcmeLogo from '@/app/ui/acme-logo';
+import LoginForm from '@/app/ui/login-form';
+import { Metadata } from 'next';
 import { Suspense } from 'react';
-import { RevenueChartSkeleton, LatestInvoicesSkeleton, CardsSkeleton } from '@/app/ui/skeletons';
-import CardWrapper from '@/app/ui/dashboard/cards';
 
-export default async function Page () {
-    const latestInvoices = await fetchLatestInvoices();
-    return (
-        <main>
-            <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>Dashboard</h1>
-            <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-                <Suspense>
-                    <CardWrapper />
-                </Suspense>
-            </div>
-            <div className='mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8'>
-                <Suspense fallback={<RevenueChartSkeleton/>}>
-                    <RevenueChart />
-                </Suspense>
-                <Suspense fallback={<LatestInvoicesSkeleton/>}>
-                    <LatestInvoices />
-                </Suspense>
-            </div>
-        </main>
-    )
+export const metadata: Metadata = {
+  title: 'Login',
+};
+
+export default function LoginPage() {
+  return (
+    <main className="flex items-center justify-center md:h-screen">
+      <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
+        <div className="flex h-20 w-full items-end rounded-lg bg-blue-500 p-3 md:h-36">
+          <div className="w-32 text-white md:w-36">
+            <AcmeLogo />
+          </div>
+        </div>
+        <Suspense>
+          <LoginForm />
+        </Suspense>
+      </div>
+    </main>
+  );
 }
